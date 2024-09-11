@@ -51,6 +51,7 @@ public final class MusixmatchAPIClient {
         self.session = session
     }
     
+    @available(iOS 16.0, *)
     public func searchTrack(_ track: String, artist: String) async throws -> [Track] {
         let url = baseUrl
             .appending(path: Method.trackSearch.rawValue)
@@ -73,6 +74,7 @@ public final class MusixmatchAPIClient {
         return apiResponse.message.body.trackList.map { $0.track }
     }
     
+    @available(iOS 15.0, *)
     func get(_ url: URL) async throws -> (data: Data, response: URLResponse) {
         let (data, response) = try await session.data(from: url)
         
@@ -88,6 +90,7 @@ public final class MusixmatchAPIClient {
 }
 
 extension URL {
+    @available(iOS 16.0, *)
     func appendingAuthentication(apiKey: String?) -> URL {
         appending(queryItems: [URLQueryItem(name: "apikey", value: apiKey)])
     }
