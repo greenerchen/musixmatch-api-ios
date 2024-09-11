@@ -61,7 +61,6 @@ public final class MusixmatchAPIClient {
                 URLQueryItem(name: "q_track", value: String(data: track.data(using: .utf8) ?? Data(), encoding: .utf8)),
                 URLQueryItem(name: "q_artist", value: String(data: artist.data(using: .utf8) ?? Data(), encoding: .utf8)),
         ])
-        debugPrint("url: \(url)")
         let (data, _) = try await get(url)
         
         guard let apiResponse = try? JSONDecoder().decode(TrackSearchResponse.self, from: data) else {
