@@ -10,7 +10,7 @@ import XCTest
 
 final class MusixmatchAPITests: XCTestCase {
 
-    func test_search_withArtistNamesAndTitle_getSongLyrics() async throws {
+    func test_trackSearch_withArtistNamesAndTitle_getSongLyrics() async throws {
         let track = "A Thousand Years"
         let artist = "Christina Perri"
         let client = MusixmatchAPIClient()
@@ -22,7 +22,30 @@ final class MusixmatchAPITests: XCTestCase {
             XCTFail("No track found")
             return
         }
-        XCTAssertEqual(track.commontrackId, 10074988, "commontrackId: \(track.commontrackId)")
+        XCTAssertEqual(track.id, 274345545, "trackId: \(track.id)")
     }
 
+    func test_trackSearch_withUnavailableArtistNamesAndTitle_getNoSongLyrics() async throws {
+        let track = "A Thousand Years"
+        let artist = "Christina Perri"
+        let client = MusixmatchAPIClient()
+        
+        let tracklist = try await client.searchTrack(track, artist: artist)
+        
+        XCTAssertGreaterThan(tracklist.count, 0)
+        guard let track = tracklist.first else {
+            XCTFail("No track found")
+            return
+        }
+        XCTAssertNotEqual(track.id, 274345545, "trackId: \(track.id)")
+    }
+    
+    func test_trackLyricsGet_withTrackId_getLyrics() async throws {
+        let trackId = 274345545
+        let client = MusixmatchAPIClient()
+        
+        let lyrics = try await client.getLyrics(trackId: trackId)
+        
+        XCTAssertTrue(lyrics.body.contains("Heart beats fast"))
+    }
 }
