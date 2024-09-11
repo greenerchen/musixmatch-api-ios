@@ -13,6 +13,8 @@
 		AAA347DF2C9140AE0011A39D /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA347DE2C9140AE0011A39D /* Track.swift */; };
 		AAA347E22C9142320011A39D /* TrackSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA347E12C9142320011A39D /* TrackSearchResponse.swift */; };
 		AAA347E42C9146350011A39D /* ResponseMessageHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA347E32C9146350011A39D /* ResponseMessageHeader.swift */; };
+		AAA347F32C9198E50011A39D /* Lyrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA347F22C9198E50011A39D /* Lyrics.swift */; };
+		AAA347F52C919A0B0011A39D /* TrackLyricsGetResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA347F42C919A0B0011A39D /* TrackLyricsGetResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,8 @@
 		AAA347E12C9142320011A39D /* TrackSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackSearchResponse.swift; sourceTree = "<group>"; };
 		AAA347E32C9146350011A39D /* ResponseMessageHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseMessageHeader.swift; sourceTree = "<group>"; };
 		AAA347E52C914F690011A39D /* MusixmatchAPIClient.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MusixmatchAPIClient.xctestplan; sourceTree = "<group>"; };
+		AAA347F22C9198E50011A39D /* Lyrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lyrics.swift; sourceTree = "<group>"; };
+		AAA347F42C919A0B0011A39D /* TrackLyricsGetResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackLyricsGetResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 			children = (
 				AAA347E02C9142160011A39D /* API Responses */,
 				AAA347DE2C9140AE0011A39D /* Track.swift */,
+				AAA347F22C9198E50011A39D /* Lyrics.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -115,8 +120,9 @@
 		AAA347E02C9142160011A39D /* API Responses */ = {
 			isa = PBXGroup;
 			children = (
-				AAA347E12C9142320011A39D /* TrackSearchResponse.swift */,
 				AAA347E32C9146350011A39D /* ResponseMessageHeader.swift */,
+				AAA347E12C9142320011A39D /* TrackSearchResponse.swift */,
+				AAA347F42C919A0B0011A39D /* TrackLyricsGetResponse.swift */,
 			);
 			path = "API Responses";
 			sourceTree = "<group>";
@@ -216,7 +222,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAA347C92C913F7A0011A39D /* MusixmatchAPIClient.swift in Sources */,
+				AAA347F32C9198E50011A39D /* Lyrics.swift in Sources */,
 				AAA347E22C9142320011A39D /* TrackSearchResponse.swift in Sources */,
+				AAA347F52C919A0B0011A39D /* TrackLyricsGetResponse.swift in Sources */,
 				AAA347DF2C9140AE0011A39D /* Track.swift in Sources */,
 				AAA347E42C9146350011A39D /* ResponseMessageHeader.swift in Sources */,
 			);
