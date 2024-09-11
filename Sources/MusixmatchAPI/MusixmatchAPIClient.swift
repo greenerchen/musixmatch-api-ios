@@ -47,7 +47,7 @@ public final class MusixmatchAPIClient {
     
     private let session: URLSession
     
-    init(session: URLSession = URLSession.shared) {
+    public init(session: URLSession = URLSession.shared) {
         self.session = session
     }
     
