@@ -39,6 +39,7 @@ public final class MusixmatchAPIClient {
     
     enum Method: String, RawRepresentable {
         case trackSearch = "track.search"
+        case trackLyricsGet = "track.lyrics.get"
     }
     
     private var apiKey: String? = ProcessInfo().environment["MUSIXMATCH_APIKEY"]
@@ -60,7 +61,6 @@ public final class MusixmatchAPIClient {
                 URLQueryItem(name: "q_track", value: String(data: track.data(using: .utf8) ?? Data(), encoding: .utf8)),
                 URLQueryItem(name: "q_artist", value: String(data: artist.data(using: .utf8) ?? Data(), encoding: .utf8)),
         ])
-        debugPrint("url: \(url)")
         let (data, _) = try await get(url)
         
         guard let apiResponse = try? JSONDecoder().decode(TrackSearchResponse.self, from: data) else {
@@ -72,6 +72,27 @@ public final class MusixmatchAPIClient {
         }
         
         return apiResponse.message.body.trackList.map { $0.track }
+    }
+    
+    @available(iOS 16.0, *)
+    public func getLyrics(trackId: Int) async throws -> Lyrics {
+        let url = baseUrl
+            .appending(path: Method.trackLyricsGet.rawValue)
+            .appendingAuthentication(apiKey: apiKey)
+            .appending(queryItems: [
+                URLQueryItem(name: "track_id", value: String(trackId)),
+        ])
+        let (data, _) = try await get(url)
+        
+        guard let apiResponse = try? JSONDecoder().decode(TrackLyricsGetResponse.self, from: data) else {
+            throw Error.decodingError
+        }
+        
+        guard apiResponse.message.header.statusCode == StatusCode.OK.rawValue else {
+            throw Error.invalidAPIResponse(statusCode: apiResponse.message.header.statusCode)
+        }
+        
+        return apiResponse.message.body.lyrics
     }
     
     @available(iOS 15.0, *)
