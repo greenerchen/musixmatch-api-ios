@@ -23,6 +23,7 @@ final class MusixmatchAPITests: XCTestCase {
             return
         }
         XCTAssertEqual(track.id, 274345545, "trackId: \(track.id)")
+        XCTAssertNotNil(track.backlinkUrl)
     }
     
     func test_trackSearch_withWrongCombinationOfArtistAndTitle_getIncorrectTrack() async throws {
