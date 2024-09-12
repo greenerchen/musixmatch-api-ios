@@ -20,7 +20,7 @@ public struct Track: Decodable {
     public let subtitleId: Int?
     public let lyricsBody: String?
     public let lyricsCopyright: String?
-    public let backlineUrl: String?
+    public let backlinkUrl: String?
     
     enum CodingKeys: String, CodingKey {
         case id = "track_id"
@@ -35,7 +35,7 @@ public struct Track: Decodable {
         case subtitleId = "subtitle_id"
         case lyricsBody = "lyrics_body"
         case lyricsCopyright = "lyrics_copyright"
-        case backlineUrl = "backlink_url"
+        case backlinkUrl = "track_share_url"
     }
     
     public init(from decoder: any Decoder) throws {
@@ -52,6 +52,6 @@ public struct Track: Decodable {
         self.subtitleId = try container.decodeIfPresent(Int.self, forKey: .subtitleId)
         self.lyricsBody = try container.decodeIfPresent(String.self, forKey: .lyricsBody)
         self.lyricsCopyright = try container.decodeIfPresent(String.self, forKey: .lyricsCopyright)
-        self.backlineUrl = try container.decodeIfPresent(String.self, forKey: .backlineUrl)
+        self.backlinkUrl = try container.decodeIfPresent(String.self, forKey: .backlinkUrl)
     }
 }
