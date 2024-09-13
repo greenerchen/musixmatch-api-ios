@@ -23,9 +23,9 @@ jobs:
           MUSIXMATCH_APIKEY: ${{ secrets.MUSIXMATCH_APIKEY }}
       run: swift test --enable-code-coverage
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1.2.1
       env: 
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      # uses: codecov/codecov-action@v1.2.1
       run: |
         # Replace `linux` below with the appropriate OS
         # Options are `alpine`, `linux`, `macos`, `windows`
