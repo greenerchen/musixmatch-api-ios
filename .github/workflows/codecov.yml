@@ -19,8 +19,7 @@ jobs:
     - name: Build
       run: swift build -v
     - name: Run tests
-      env: 
-          MUSIXMATCH_APIKEY: ${{ secrets.MUSIXMATCH_APIKEY }}
+      env: MUSIXMATCH_APIKEY: ${{ secrets.MUSIXMATCH_APIKEY }}
       run: swift test --enable-code-coverage
     - name: Upload coverage to Codecov
       env: 
