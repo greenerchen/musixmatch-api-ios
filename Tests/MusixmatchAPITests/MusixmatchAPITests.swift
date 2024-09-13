@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import MusixmatchAPIClient
+@testable import MusixmatchAPI
 
 final class MusixmatchAPITests: XCTestCase {
     

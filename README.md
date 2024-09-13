@@ -12,35 +12,24 @@ let package = Package(
     name: "MyApp",
     dependencies: [
         .package(url: "git@github.com:greenerchen/musixmatch-api-ios.git",
-            .upToNextMajor(from: "1.0.0"))
+            .upToNextMajor(from: "1.0.6"))
     ]
 )
 ```
 
 # How to
 ## Make A Request To Search Lyrics
+Set the environment variable `MUSIXMATCH_APIKEY` before using this.
 
 ```
-import Combine
 import MusixmatchAPI
 
-var store = Set<AnyCancellable>()
 let client = MusixmatchAPIClient()
-                                
-client.search("Lucky", artist: "Jason Mraz")
-    .receive(on: DispatchQueue.main)
-    .sink(receiveCompletion: { completion in
-        switch completion {
-        case .failure(let error):
-            debugPrint("Search failed - \(error.localizedDescription)")
-        default:
-            break
-        }
-    }, receiveValue: { track in
-        debugPrint("Artist name - \(track.artistArtist)")
-        debugPrint("Title - \(track.trackName)")
-        debugPrint("Lyrics - \(track.lyricsBody)")
-    })
-    .store(in: &store)
+let track = try await client.search("Lucky", artist: "Jason Mraz")
+debugPrint("Artist name - \(track.trackArtist)")
+debugPrint("Title - \(track.trackName)")
+debugPrint("Track ID - \(track.id)")
+let lyrics = try await client.getLyrics(trackId: track.id)
+debugPrint(lyrics.body)
 ```
 
