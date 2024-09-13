@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/greenerchen/musixmatch-api-ios/graph/badge.svg?token=H8LSDP6ADE)](https://codecov.io/gh/greenerchen/musixmatch-api-ios)
+
 # musixmatch-api-ios
 A Swift Package for searching lyrics using Musixmatch API
 
