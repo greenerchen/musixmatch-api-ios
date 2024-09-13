@@ -4,10 +4,8 @@
 name: Swift
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", feature/*, fix/* ]
 
 jobs:
   build:
@@ -19,5 +17,10 @@ jobs:
     - name: Build
       run: swift build -v
     - name: Run tests
-      env: MUSIXMATCH_APIKEY: ${{ secrets.MUSIXMATCH_APIKEY }}
-      run: swift test -v
+      env: 
+        MUSIXMATCH_APIKEY: ${{ secrets.MUSIXMATCH_APIKEY }}
+      run: swift test --enable-code-coverage
+    - name: Upload coverage to Codecov
+      env: 
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      uses: codecov/codecov-action@v1.2.1
