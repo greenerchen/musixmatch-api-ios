@@ -64,7 +64,16 @@ final class MusixmatchAPITests: XCTestCase {
         await XCTAssertAsyncThrowError(try await client.searchTrack(track, artist: artist))
     }
     
-    func test_trackLyricsSearch_withISRC_getCorrectTrack() async throws {
+    func test_trackGet_withISRC_getCorrectTrack() async throws {
+        let track_isrc = "US25L1900253"
+        let client = MusixmatchAPIClient()
+        
+        let track = try await client.getTrack(isrc: track_isrc)
+        
+        XCTAssertEqual(track.trackName, "Way Maker - Live")
+    }
+    
+    func test_trackLyricsGet_withISRC_getCorrectTrack() async throws {
         let track_isrc = "US25L1900253"
         let client = MusixmatchAPIClient()
         

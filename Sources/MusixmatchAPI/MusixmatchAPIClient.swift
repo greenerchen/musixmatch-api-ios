@@ -40,6 +40,7 @@ public final class MusixmatchAPIClient {
     enum Method: String, RawRepresentable {
         case trackSearch = "track.search"
         case trackLyricsGet = "track.lyrics.get"
+        case trackGet = "track.get"
     }
     
     private var apiKey: String? = ProcessInfo().environment["MUSIXMATCH_APIKEY"]
@@ -57,6 +58,22 @@ public final class MusixmatchAPIClient {
         if apiKey != nil {
             self.apiKey = apiKey
         }
+    }
+    
+    public func getTrack(isrc: String) async throws -> Track {
+        let url = baseUrl
+            .appending(path: Method.trackGet.rawValue)
+            .appendingAuthentication(apiKey: apiKey)
+            .appending(queryItems: [
+                URLQueryItem(name: "track_isrc", value: String(data: isrc.data(using: .utf8) ?? Data(), encoding: .utf8))
+        ])
+        let (data, _) = try await get(url)
+        
+        guard let apiResponse = try? JSONDecoder().decode(TrackGetResponse.self, from: data) else {
+            throw Error.decodingError
+        }
+        
+        return apiResponse.message.body.track
     }
     
     public func searchTrack(_ track: String, artist: String) async throws -> [Track] {
