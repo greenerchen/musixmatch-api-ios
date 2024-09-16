@@ -25,4 +25,4 @@ jobs:
     - name: Upload coverage to Codecov
       env: 
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      uses: codecov/codecov-action@v1.2.1
+      run: bash <(curl -s https://codecov.io/bash) -J '^MusixmatchAPI$'
