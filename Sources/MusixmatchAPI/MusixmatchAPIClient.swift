@@ -93,6 +93,27 @@ public final class MusixmatchAPIClient {
         return apiResponse.message.body.lyrics
     }
     
+    public func getLyrics(isrc: String) async throws -> Lyrics {
+        let url = baseUrl
+            .appending(path: Method.trackLyricsGet.rawValue)
+            .appendingAuthentication(apiKey: apiKey)
+            .appending(queryItems: [
+                URLQueryItem(name: "track_isrc", value: String(data: isrc.data(using: .utf8) ?? Data(), encoding: .utf8))
+        ])
+        let (data, _) = try await get(url)
+        
+        guard let apiResponse = try? JSONDecoder().decode(TrackLyricsGetResponse.self, from: data) else {
+            throw Error.decodingError
+        }
+        
+        guard apiResponse.message.header.statusCode == StatusCode.OK.rawValue else {
+            throw Error.invalidAPIResponse(statusCode: apiResponse.message.header.statusCode)
+        }
+        
+        return apiResponse.message.body.lyrics
+    }
+    
+    
     func get(_ url: URL) async throws -> (data: Data, response: URLResponse) {
         let (data, response) = try await session.data(from: url)
         

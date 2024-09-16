@@ -56,6 +56,15 @@ final class MusixmatchAPITests: XCTestCase {
         XCTAssertEqual(track.id, 107955257, "trackId: \(track.id) \(track.trackName)") // track: One day, one hour
     }
     
+    func test_trackLyricsSearch_withISRC_getCorrectTrack() async throws {
+        let track_isrc = "US25L1900253"
+        let client = MusixmatchAPIClient()
+        
+        let lyrics = try await client.getLyrics(isrc: track_isrc)
+        
+        XCTAssertTrue(lyrics.body.hasPrefix("You are here, moving in our midst"))
+    }
+    
     func test_trackLyricsGet_withTrackId_getLyrics() async throws {
         let trackId = 274345545
         let client = MusixmatchAPIClient()
