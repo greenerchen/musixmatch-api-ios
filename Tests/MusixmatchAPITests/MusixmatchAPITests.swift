@@ -56,6 +56,23 @@ final class MusixmatchAPITests: XCTestCase {
         XCTAssertEqual(track.id, 107955257, "trackId: \(track.id) \(track.trackName)") // track: One day, one hour
     }
     
+    func test_trackSearch_withoutAPIkey_getFailureResponse() async throws {
+        let track = "A Thousand Years"
+        let artist = "Christina Perri"
+        let client = MusixmatchAPIClient(apiKey: "")
+        
+        await XCTAssertAsyncThrowError(try await client.searchTrack(track, artist: artist))
+    }
+    
+    func test_trackLyricsSearch_withISRC_getCorrectTrack() async throws {
+        let track_isrc = "US25L1900253"
+        let client = MusixmatchAPIClient()
+        
+        let lyrics = try await client.getLyrics(isrc: track_isrc)
+        
+        XCTAssertTrue(lyrics.body.hasPrefix("You are here, moving in our midst"))
+    }
+    
     func test_trackLyricsGet_withTrackId_getLyrics() async throws {
         let trackId = 274345545
         let client = MusixmatchAPIClient()
@@ -63,5 +80,12 @@ final class MusixmatchAPITests: XCTestCase {
         let lyrics = try await client.getLyrics(trackId: trackId)
         
         XCTAssertTrue(lyrics.body.hasPrefix("Heart beats fast"))
+    }
+    
+    func test_trackLyricsGet_withoutAPIkey_getFailureResponse() async throws {
+        let trackId = 274345545
+        let client = MusixmatchAPIClient(apiKey: "")
+        
+        await XCTAssertAsyncThrowError(try await client.getLyrics(trackId: trackId))
     }
 }
