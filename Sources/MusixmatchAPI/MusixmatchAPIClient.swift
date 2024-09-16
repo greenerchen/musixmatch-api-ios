@@ -48,7 +48,11 @@ public final class MusixmatchAPIClient {
     
     private let session: URLSession
     
-    public init(session: URLSession = URLSession.shared, apiKey: String? = nil) {
+    public init(
+        session: URLSession = URLSession.shared,
+        apiKey: String? = nil,
+        apiLimitStrategy: APILimitStrategy = RequestQueuesStrategy(limitPerSecond: 1)
+    ) {
         self.session = session
         if apiKey != nil {
             self.apiKey = apiKey
@@ -69,10 +73,6 @@ public final class MusixmatchAPIClient {
             throw Error.decodingError
         }
         
-        guard apiResponse.message.header.statusCode == StatusCode.OK.rawValue else {
-            throw Error.invalidAPIResponse(statusCode: apiResponse.message.header.statusCode)
-        }
-        
         return apiResponse.message.body.trackList.map { $0.track }
     }
     
@@ -89,10 +89,6 @@ public final class MusixmatchAPIClient {
             throw Error.decodingError
         }
         
-        guard apiResponse.message.header.statusCode == StatusCode.OK.rawValue else {
-            throw Error.invalidAPIResponse(statusCode: apiResponse.message.header.statusCode)
-        }
-        
         return apiResponse.message.body.lyrics
     }
     
@@ -103,14 +99,11 @@ public final class MusixmatchAPIClient {
             .appending(queryItems: [
                 URLQueryItem(name: "track_isrc", value: String(data: isrc.data(using: .utf8) ?? Data(), encoding: .utf8))
         ])
+        
         let (data, _) = try await get(url)
         
         guard let apiResponse = try? JSONDecoder().decode(TrackLyricsGetResponse.self, from: data) else {
             throw Error.decodingError
-        }
-        
-        guard apiResponse.message.header.statusCode == StatusCode.OK.rawValue else {
-            throw Error.invalidAPIResponse(statusCode: apiResponse.message.header.statusCode)
         }
         
         return apiResponse.message.body.lyrics
@@ -118,6 +111,9 @@ public final class MusixmatchAPIClient {
     
     
     func get(_ url: URL) async throws -> (data: Data, response: URLResponse) {
+        // logging
+        // Check API limits
+        
         let (data, response) = try await session.data(from: url)
         
         guard let httpResponse = response as? HTTPURLResponse else {
@@ -125,6 +121,12 @@ public final class MusixmatchAPIClient {
         }
         guard httpResponse.statusCode == StatusCode.OK.rawValue else {
             throw Error.invalidServerStatus(code: httpResponse.statusCode)
+        }
+        guard let apiResponse = try? JSONDecoder().decode(GeneralResponse.self, from: data) else {
+            throw Error.decodingError
+        }
+        guard apiResponse.message.header.statusCode == StatusCode.OK.rawValue else {
+            throw Error.invalidAPIResponse(statusCode: httpResponse.statusCode)
         }
         
         return (data, response)
