@@ -61,12 +61,7 @@ final class MusixmatchAPITests: XCTestCase {
         let artist = "Christina Perri"
         let client = MusixmatchAPIClient(apiKey: "")
         
-        do {
-            _ = try await client.searchTrack(track, artist: artist)
-            XCTFail("Expected to throw an error")
-        } catch {
-            
-        }
+        await XCTAssertAsyncThrowError(try await client.searchTrack(track, artist: artist))
     }
     
     func test_trackLyricsSearch_withISRC_getCorrectTrack() async throws {
@@ -91,11 +86,6 @@ final class MusixmatchAPITests: XCTestCase {
         let trackId = 274345545
         let client = MusixmatchAPIClient(apiKey: "")
         
-        do {
-            _ = try await client.getLyrics(trackId: trackId)
-            XCTFail("Expected to throw an error")
-        } catch {
-            
-        }
+        await XCTAssertAsyncThrowError(try await client.getLyrics(trackId: trackId))
     }
 }
