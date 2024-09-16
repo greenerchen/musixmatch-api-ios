@@ -48,8 +48,11 @@ public final class MusixmatchAPIClient {
     
     private let session: URLSession
     
-    public init(session: URLSession = URLSession.shared) {
+    public init(session: URLSession = URLSession.shared, apiKey: String? = nil) {
         self.session = session
+        if apiKey != nil {
+            self.apiKey = apiKey
+        }
     }
     
     public func searchTrack(_ track: String, artist: String) async throws -> [Track] {
