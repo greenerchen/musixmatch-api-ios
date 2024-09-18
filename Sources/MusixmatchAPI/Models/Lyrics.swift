@@ -30,4 +30,29 @@ public struct Lyrics: Decodable {
         self.scriptTrackingUrl = try container.decode(String.self, forKey: .scriptTrackingUrl)
         self.copyright = try container.decode(String.self, forKey: .copyright)
     }
+    
+    init(
+        id: Int,
+        explicit: Bool,
+        body: String,
+        scriptTrackingUrl: String,
+        copyright: String
+    ) {
+        self.id = id
+        self.explicit = explicit
+        self.body = body
+        self.scriptTrackingUrl = scriptTrackingUrl
+        self.copyright = copyright
+    }
+}
+
+extension Lyrics: Encodable {
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(explicit ? 1 : 0, forKey: .explicit)
+        try container.encode(body, forKey: .body)
+        try container.encode(scriptTrackingUrl, forKey: .scriptTrackingUrl)
+        try container.encode(copyright, forKey: .copyright)
+    }
 }

@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct TrackSearchResponse: Decodable {
+struct TrackSearchResponse: Codable {
     let message: TrackSearchMessage
 }
 
-struct TrackSearchMessage: Decodable {
+struct TrackSearchMessage: Codable {
     let header: ResponseMessageHeader
     let body: TrackSearchBody
 }
 
-struct TrackSearchBody: Decodable {
+struct TrackSearchBody: Codable {
     let trackList: [TrackItem]
     
     enum CodingKeys: String, CodingKey {
@@ -24,6 +24,6 @@ struct TrackSearchBody: Decodable {
     }
 }
 
-struct TrackItem: Decodable {
+struct TrackItem: Codable {
     let track: Track
 }
