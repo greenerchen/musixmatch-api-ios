@@ -195,13 +195,3 @@ extension URL {
         appending(queryItems: [URLQueryItem(name: "apikey", value: apiKey)])
     }
 }
-
-extension Result {
-    init (asyncCatching closure: () async throws -> Success) async where Failure == Error {
-        do {
-            self = .success(try await closure())
-        } catch {
-            self = .failure(error)
-        }
-    }
-}
