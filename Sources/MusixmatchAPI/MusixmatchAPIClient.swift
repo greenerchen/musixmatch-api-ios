@@ -47,6 +47,7 @@ public final class MusixmatchAPIClient {
         case trackGet = "track.get"
     }
     
+    private var operationQueue = OperationQueue()
     private var concurrentQueue = DispatchQueue(label: "com.greenerchen.musixmatchapi.networking", attributes: .concurrent)
     
     private var apiCallCount: Int = 0
@@ -141,15 +142,15 @@ public final class MusixmatchAPIClient {
     
     func get(_ url: URL) async throws -> (data: Data, response: URLResponse) {
         // TODO: purge logs when it's become massive
-        concurrentQueue.async {
+        try concurrentQueue.sync {
             self.apiCallCount += 1
             let address = url.host() ?? "api.musixmatch.com"
             self.logger.log("\(self.apiCallCount), \(address), \(Date().timeIntervalSince1970)")
-        }
-        
-        let rejectedIds = apiLimitStrategy.getRejectedRequests(logger.messages)
-        guard !rejectedIds.contains(apiCallCount) else {
-            throw Error.exceedAPIRateLimit
+            
+            let rejectedIds = apiLimitStrategy.getRejectedRequests(logger.messages)
+            guard !rejectedIds.contains(apiCallCount) else {
+                throw Error.exceedAPIRateLimit
+            }
         }
         
         let (data, response) = try await session.data(from: url)
@@ -176,5 +177,15 @@ public final class MusixmatchAPIClient {
 extension URL {
     func appendingAuthentication(apiKey: String?) -> URL {
         appending(queryItems: [URLQueryItem(name: "apikey", value: apiKey)])
+    }
+}
+
+extension Result {
+    init (asyncCatching closure: () async throws -> Success) async where Failure == Error {
+        do {
+            self = .success(try await closure())
+        } catch {
+            self = .failure(error)
+        }
     }
 }

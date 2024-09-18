@@ -30,7 +30,7 @@ public struct RequestQueuesStrategy: APILimitStrategy {
             guard let request = Request(requestString: r) else { continue }
             if let requestTimes = requestTimesMap[request.ipAddress],
                let lastRequestTimestamp = lastRequestTimestampMap[request.ipAddress],
-                Int(request.timestamp) == Int(lastRequestTimestamp) {
+                Int(request.timestamp * 1000) - Int(lastRequestTimestamp * 1000) < 1000 {
                 requestTimesMap[request.ipAddress]! += 1
                 if requestTimes >= limitPerSecond {
                     rejectedRequestIds.append(request.id)
