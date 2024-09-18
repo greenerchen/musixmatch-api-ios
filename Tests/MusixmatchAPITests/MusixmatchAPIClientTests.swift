@@ -82,7 +82,7 @@ final class MusixmatchAPIClientTests: XCTestCase {
         }
         
         XCTAssertEqual(track.id, 100001, "trackId: \(track.id)")
-        XCTAssertEqual(track.commontrackId, 200001, "trackId: \(track.commontrackId)")
+        XCTAssertEqual(track.commontrackId, 200001, "commontrackId: \(track.commontrackId)")
         XCTAssertEqual(track.trackName, "Way Maker")
     }
     
@@ -93,19 +93,28 @@ final class MusixmatchAPIClientTests: XCTestCase {
         let track = try await client.getTrack(isrc: "ISRC")
         
         XCTAssertEqual(track.id, 100001, "trackId: \(track.id)")
-        XCTAssertEqual(track.commontrackId, 200001, "trackId: \(track.commontrackId)")
+        XCTAssertEqual(track.commontrackId, 200001, "commontrackId: \(track.commontrackId)")
         XCTAssertEqual(track.trackName, "Way Maker")
     }
     
     func test_trackLyricsGet_getByTrackId_expectDecodingSuccessfuly() async throws {
-        let dataStub = try JSONEncoder().encode(trackGetResponseStub)
+        let dataStub = try JSONEncoder().encode(trackLyricsGetResponseStub)
         let client = MusixmatchAPIClient(session: MusixmatchAPISessionMock(getUrlResultStub: (dataStub, responseStub)))
         
-        let track = try await client.getTrack(isrc: "ISRC")
+        let lyrics = try await client.getLyrics(trackId: 1001)
         
-        XCTAssertEqual(track.id, 100001, "trackId: \(track.id)")
-        XCTAssertEqual(track.commontrackId, 200001, "trackId: \(track.commontrackId)")
-        XCTAssertEqual(track.trackName, "Way Maker")
+        XCTAssertEqual(lyrics.id, 1001, "lyricsId: \(lyrics.id)")
+        XCTAssertEqual(lyrics.body, "Heart beats fast", "lyricsBody: \(lyrics.body)")
+    }
+    
+    func test_trackLyricsGet_getByISRC_expectDecodingSuccessfuly() async throws {
+        let dataStub = try JSONEncoder().encode(trackLyricsGetResponseStub)
+        let client = MusixmatchAPIClient(session: MusixmatchAPISessionMock(getUrlResultStub: (dataStub, responseStub)))
+        
+        let lyrics = try await client.getLyrics(isrc: "UMED23")
+        
+        XCTAssertEqual(lyrics.id, 1001, "lyricsId: \(lyrics.id)")
+        XCTAssertEqual(lyrics.body, "Heart beats fast", "lyricsBody: \(lyrics.body)")
     }
 }
 
@@ -125,33 +134,3 @@ final class MusixmatchAPISessionMock: URLSessionProtocol {
     }
 }
 
-let trackStub = Track(
-    id: 100001,
-    commontrackId: 200001,
-    trackName: "Way Maker",
-    artistName: "Leeland",
-    restricted: false,
-    explicit: false,
-    hasLyrics: true,
-    hasSubtitles: true,
-    lyricsId: 123456,
-    subtitleId: 234567,
-    lyricsBody: "You are here, moving in our midst",
-    lyricsCopyright: "Copyright",
-    backlinkUrl: "link")
-
-let trackItemStub = TrackItem(track: trackStub)
-let trackSearchBodyStub = TrackSearchBody(trackList: [trackItemStub])
-let trackSearchMsgSub = TrackSearchMessage(header: ResponseMessageHeader(statusCode: 200), body: trackSearchBodyStub)
-let trackSearchResponseStub = TrackSearchResponse(message: trackSearchMsgSub)
-
-let trackGetBodyStub = TrackGetBody(track: trackStub)
-let trackGetMsgStub = TrackGetMessage(header: ResponseMessageHeader(statusCode: 200), body: trackGetBodyStub)
-let trackGetResponseStub = TrackGetResponse(message: trackGetMsgStub)
-
-let responseStub = HTTPURLResponse(
-    url: URL(string: "https://anyurl.com")!,
-    statusCode: 200,
-    httpVersion: "1.1",
-    headerFields: nil
-)!

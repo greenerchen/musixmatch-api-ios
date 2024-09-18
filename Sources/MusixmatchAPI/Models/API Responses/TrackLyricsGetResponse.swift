@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct TrackLyricsGetResponse: Decodable {
+struct TrackLyricsGetResponse: Codable {
     let message: TrackLyricsGetMessage
 }
 
-struct TrackLyricsGetMessage: Decodable {
+struct TrackLyricsGetMessage: Codable {
     let header: ResponseMessageHeader
     let body: TrackLyricsBody
 }
 
-struct TrackLyricsBody: Decodable {
+struct TrackLyricsBody: Codable {
     let lyrics: Lyrics
 }

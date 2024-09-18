@@ -97,10 +97,10 @@ extension Track: Encodable {
         try container.encode(explicit ? 1 : 0, forKey: .explicit)
         try container.encode(hasLyrics ? 1 : 0, forKey: .hasLyrics)
         try container.encode(hasSubtitles ? 1 : 0, forKey: .hasSubtitles)
-        try container.encode(lyricsId, forKey: .lyricsId)
-        try container.encode(subtitleId, forKey: .subtitleId)
-        try container.encode(lyricsBody, forKey: .lyricsBody)
-        try container.encode(lyricsCopyright, forKey: .lyricsCopyright)
-        try container.encode(backlinkUrl, forKey: .backlinkUrl)
+        try container.encodeIfPresent(lyricsId, forKey: .lyricsId)
+        try container.encodeIfPresent(subtitleId, forKey: .subtitleId)
+        try container.encodeIfPresent(lyricsBody, forKey: .lyricsBody)
+        try container.encodeIfPresent(lyricsCopyright, forKey: .lyricsCopyright)
+        try container.encodeIfPresent(backlinkUrl, forKey: .backlinkUrl)
     }
 }
