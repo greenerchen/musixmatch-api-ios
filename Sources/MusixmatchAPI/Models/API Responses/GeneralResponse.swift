@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct GeneralResponse: Decodable {
+struct GeneralResponse: Codable {
     let message: GeneralMessage
 }
 
-struct GeneralMessage: Decodable {
+struct GeneralMessage: Codable {
     let header: ResponseMessageHeader
 }

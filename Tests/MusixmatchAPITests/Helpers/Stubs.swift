@@ -32,9 +32,16 @@ let trackGetBodyStub = TrackGetBody(track: trackStub)
 let trackGetMsgStub = TrackGetMessage(header: ResponseMessageHeader(statusCode: 200), body: trackGetBodyStub)
 let trackGetResponseStub = TrackGetResponse(message: trackGetMsgStub)
 
-let responseStub = HTTPURLResponse(
+let responseOKStub = HTTPURLResponse(
     url: URL(string: "https://anyurl.com")!,
     statusCode: 200,
+    httpVersion: "1.1",
+    headerFields: nil
+)!
+
+let response500Stub = HTTPURLResponse(
+    url: URL(string: "https://anyurl.com")!,
+    statusCode: 500,
     httpVersion: "1.1",
     headerFields: nil
 )!
@@ -49,3 +56,6 @@ let lyricsStub = Lyrics(
 
 let trackLyricsGetMsg = TrackLyricsGetMessage(header: ResponseMessageHeader(statusCode: 200), body: TrackLyricsBody(lyrics: lyricsStub))
 let trackLyricsGetResponseStub = TrackLyricsGetResponse(message: trackLyricsGetMsg)
+
+let generalOKMsgStub = GeneralMessage(header: ResponseMessageHeader(statusCode: 200))
+let generalOKResponseStub = GeneralResponse(message: generalOKMsgStub)

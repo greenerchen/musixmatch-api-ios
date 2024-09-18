@@ -171,18 +171,13 @@ public final class MusixmatchAPIClient {
         
         let (data, response) = try await session.get(url)
         
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw Error.invalidServerResponse
-        }
-        guard httpResponse.statusCode == StatusCode.OK.rawValue else {
+        if let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode != StatusCode.OK.rawValue {
             throw Error.invalidServerStatus(code: httpResponse.statusCode)
         }
         
-        guard let apiResponse = try? JSONDecoder().decode(GeneralResponse.self, from: data) else {
-            throw Error.decodingError
-        }
-        
-        guard apiResponse.message.header.statusCode == StatusCode.OK.rawValue else {
+        if let apiResponse = try? JSONDecoder().decode(GeneralResponse.self, from: data),
+           apiResponse.message.header.statusCode != StatusCode.OK.rawValue {
             throw Error.invalidAPIResponse(statusCode: apiResponse.message.header.statusCode)
         }
         
