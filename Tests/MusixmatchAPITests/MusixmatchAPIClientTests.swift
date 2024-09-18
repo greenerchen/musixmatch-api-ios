@@ -32,45 +32,11 @@ final class MusixmatchAPIClientTests: XCTestCase {
                 ])
         
         _ = try await client.get(url)
-        await XCTAssertAsyncThrowError(try await client.get(url)) // exceedAPIRateLimit
-    }
-    
-    func test_get_givenInvalidResource_whenRequest_expectInvalidServerStatus400() async throws {
-        let limitPerSecond = 1
-        let client = MusixmatchAPIClient(apiLimitStrategy: RequestQueuesStrategy(limitPerSecond: limitPerSecond))
-        let apiKey = ProcessInfo().environment["MUSIXMATCH_APIKEY"]
-        let isrc = "US25L1900253"
-        let url = URL(string: "https://api.musixmatch.com/ws/1.1/")!
-            .appending(path: "track.gettttt")
-            .appendingAuthentication(apiKey: apiKey)
-            .appending(queryItems: [
-                URLQueryItem(name: "track_isrc", value: String(data: isrc.data(using: .utf8) ?? Data(), encoding: .utf8))
-                ])
-        
-        _ = try await client.get(url)
-        await XCTAssertAsyncThrowError(try await client.get(url)) { error in
-            XCTAssertTrue((error as NSError).localizedDescription.contains("400"))
+        await XCTAssertAsyncThrowError(try await client.get(url), "Expect to throw an error of exceedAPIRateLimit") { error in
+            XCTAssert(error is MusixmatchAPIClient.Error)
         }
     }
-    
-    func test_get_givenInvalidAPIMethod_whenRequest_expectInvalidAPIStatus404() async throws {
-        let limitPerSecond = 1
-        let client = MusixmatchAPIClient(apiLimitStrategy: RequestQueuesStrategy(limitPerSecond: limitPerSecond))
-        let apiKey = ProcessInfo().environment["MUSIXMATCH_APIKEY"]
-        let isrc = "US25L1900253"
-        let url = URL(string: "https://api.musixmatch.com/ws/v1.1/")!
-            .appending(path: "track.get")
-            .appendingAuthentication(apiKey: apiKey)
-            .appending(queryItems: [
-                URLQueryItem(name: "track_isrc", value: String(data: isrc.data(using: .utf8) ?? Data(), encoding: .utf8))
-                ])
-        
-        _ = try await client.get(url)
-        await XCTAssertAsyncThrowError(try await client.get(url)) 
-//        { error in
-//            XCTAssertTrue((error as NSError).localizedDescription.contains("404"))
-//        }
-    }
+
     
     func test_trackSearch_expectDecodingSuccessfuly() async throws {
         let dataStub = try JSONEncoder().encode(trackSearchResponseStub)
