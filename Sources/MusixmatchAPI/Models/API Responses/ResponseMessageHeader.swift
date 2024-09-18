@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ResponseMessageHeader: Decodable {
+struct ResponseMessageHeader: Codable {
     let statusCode: Int
     
     enum CodingKeys: String, CodingKey {

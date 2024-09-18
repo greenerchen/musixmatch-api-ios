@@ -54,4 +54,53 @@ public struct Track: Decodable {
         self.lyricsCopyright = try container.decodeIfPresent(String.self, forKey: .lyricsCopyright)
         self.backlinkUrl = try container.decodeIfPresent(String.self, forKey: .backlinkUrl)
     }
+    
+    public init(
+        id: Int,
+        commontrackId: Int,
+        trackName: String,
+        artistName: String,
+        restricted: Bool,
+        explicit: Bool,
+        hasLyrics: Bool,
+        hasSubtitles: Bool,
+        lyricsId: Int?,
+        subtitleId: Int?,
+        lyricsBody: String?,
+        lyricsCopyright: String?,
+        backlinkUrl: String?
+    ) {
+        self.id = id
+        self.commontrackId = commontrackId
+        self.trackName = trackName
+        self.artistName = artistName
+        self.restricted = restricted
+        self.explicit = explicit
+        self.hasLyrics = hasLyrics
+        self.hasSubtitles = hasSubtitles
+        self.lyricsId = lyricsId
+        self.subtitleId = subtitleId
+        self.lyricsBody = lyricsBody
+        self.lyricsCopyright = lyricsCopyright
+        self.backlinkUrl = backlinkUrl
+    }
+}
+
+extension Track: Encodable {
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(commontrackId, forKey: .commontrackId)
+        try container.encode(trackName, forKey: .trackName)
+        try container.encode(artistName, forKey: .artistName)
+        try container.encode(restricted ? 1 : 0, forKey: .restricted)
+        try container.encode(explicit ? 1 : 0, forKey: .explicit)
+        try container.encode(hasLyrics ? 1 : 0, forKey: .hasLyrics)
+        try container.encode(hasSubtitles ? 1 : 0, forKey: .hasSubtitles)
+        try container.encode(lyricsId, forKey: .lyricsId)
+        try container.encode(subtitleId, forKey: .subtitleId)
+        try container.encode(lyricsBody, forKey: .lyricsBody)
+        try container.encode(lyricsCopyright, forKey: .lyricsCopyright)
+        try container.encode(backlinkUrl, forKey: .backlinkUrl)
+    }
 }

@@ -8,11 +8,21 @@
 import Foundation
 import OSLog
 
+public protocol URLSessionProtocol {
+    func get(_ url: URL) async throws -> (data: Data, response: URLResponse)
+}
+
+extension URLSession: URLSessionProtocol {
+    public func get(_ url: URL) async throws -> (data: Data, response: URLResponse) {
+        try await data(from: url)
+    }
+}
+
 public final class MusixmatchAPIClient {
 
     static let shared: MusixmatchAPIClient = MusixmatchAPIClient()
     
-    public enum Error: Swift.Error {
+    public enum Error: Swift.Error, Equatable {
         case invalidServerResponse
         case invalidServerStatus(code: Int)
         case invalidAPIResponse(statusCode: Int)
@@ -58,12 +68,12 @@ public final class MusixmatchAPIClient {
     
     private var baseUrl: URL = URL(string: "https://api.musixmatch.com/ws/1.1/")!
     
-    private let session: URLSession
+    private let session: URLSessionProtocol
     
     private let apiLimitStrategy: APILimitStrategy
     
     public init(
-        session: URLSession = URLSession.shared,
+        session: URLSessionProtocol = URLSession.shared,
         apiKey: String? = nil,
         apiLimitStrategy: APILimitStrategy = RequestQueuesStrategy(limitPerSecond: 1)
     ) {
@@ -73,6 +83,8 @@ public final class MusixmatchAPIClient {
             self.apiKey = apiKey
         }
     }
+    
+    // MARK: track.search
     
     public func searchTrack(_ track: String, artist: String) async throws -> [Track] {
         let url = baseUrl
@@ -91,6 +103,8 @@ public final class MusixmatchAPIClient {
         return apiResponse.message.body.trackList.map { $0.track }
     }
     
+    // MARK: track.get
+    
     public func getTrack(isrc: String) async throws -> Track {
         let url = baseUrl
             .appending(path: Method.trackGet.rawValue)
@@ -106,6 +120,8 @@ public final class MusixmatchAPIClient {
         
         return apiResponse.message.body.track
     }
+    
+    // MARK: track.lyrics.get
     
     public func getLyrics(trackId: Int) async throws -> Lyrics {
         let url = baseUrl
@@ -153,7 +169,7 @@ public final class MusixmatchAPIClient {
             }
         }
         
-        let (data, response) = try await session.data(from: url)
+        let (data, response) = try await session.get(url)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             throw Error.invalidServerResponse
