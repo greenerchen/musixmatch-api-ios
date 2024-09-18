@@ -75,7 +75,7 @@ final class RequestQueuesStrategyTests: XCTestCase {
                         "7, 192.168.1.1, 1694865600",    // Seven request at second 0 (rate limit exceeded)
                         "8, 192.168.1.1, 1694865601"]    // First request at second 1
 
-        let rejectedRequestsIds: [Int] = RequestQueuesStrategy(limitPerSecond: limitPerSecond).getRejectedRequests(requests)
+        let rejectedRequestsIds: [Int] = RequestQueuesStrategy(limitPerSecond: 2).getRejectedRequests(requests)
         
         XCTAssertEqual(rejectedRequestsIds.count, 5)
         XCTAssertEqual(rejectedRequestsIds[0], 3)
