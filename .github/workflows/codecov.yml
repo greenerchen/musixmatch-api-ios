@@ -22,8 +22,8 @@ jobs:
       env: 
         MUSIXMATCH_APIKEY: ${{ secrets.MUSIXMATCH_APIKEY }}
       run: swift test --enable-code-coverage
-    - name: Collect coverage report
-      run: bash <(curl -s https://codecov.io/bash) -J 'MusixmatchAPI'
+    - name: Swift Coverage Conversion
+      uses: sersoft-gmbh/swift-coverage-action@v4.0.0
     - name: Upload coverage to Codecov
       env: 
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
