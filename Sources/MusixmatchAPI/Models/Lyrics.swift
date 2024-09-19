@@ -31,7 +31,7 @@ public struct Lyrics: Decodable {
         self.copyright = try container.decode(String.self, forKey: .copyright)
     }
     
-    init(
+    public init(
         id: Int,
         explicit: Bool,
         body: String,
