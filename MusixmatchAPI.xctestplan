@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "C3E3B02E-0126-42CC-A6AD-B9FA27C6FE2C",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:",
+          "identifier" : "MusixmatchAPI",
+          "name" : "MusixmatchAPI"
+        }
+      ]
+    },
+    "environmentVariableEntries" : [
+      {
+        "key" : "MUSIXMATCH_APIKEY",
+        "value" : "2263c5f62a9d7ee669f34aa21e3e460a"
+      }
+    ]
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MusixmatchAPITests",
+        "name" : "MusixmatchAPITests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -79,7 +79,7 @@ public final class MusixmatchAPIClient {
     ) {
         self.session = session
         self.apiLimitStrategy = apiLimitStrategy
-        if apiKey != nil {
+        if let apiKey = apiKey {
             self.apiKey = apiKey
         }
     }
